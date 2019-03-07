@@ -5,7 +5,8 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse; // Twilio!
 const bodyParser = require('body-parser'); // Twilio
 const http = require('http'); // Twilio
 const port = process.env.PORT || 5000; 
-// note we had to let our webpack development server know to proxy to this port 5000. proxy added in ./client/package.json 
+// note: we had to let our webpack development server know to proxy to this port 5000. proxy added in ./client/package.json 
+// note: history: npm i sockets.io (in root) and npm i sockets.io-client (in client directory)
 
 
 // ****************************************************
@@ -17,6 +18,24 @@ app.use(express.static("./client/build")); // for deployment serve static files 
 app.use(bodyParser.urlencoded({ extended: false })); // Twilio
 
 const db = mongoose.connect('mongodb://localhost/tinyImprovementsDb', { useNewUrlParser: true }); // will need to change for deployment
+
+
+// ****************************************************
+// Socket.io 
+// https://medium.com/@Keithweaver_/using-socket-io-with-a-mern-stack-2a7049f94b85
+// ****************************************************
+const httpSocket = http.Server(app);
+const io = require('socket.io')(httpSocket);
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('disconnect', function(){
+    console.log('User Disconnected');
+  });
+  socket.on('sms', function(msg){
+    console.log('message: ' + msg);
+  });
+});
+io.listen(8000); // ******************************************************************************************************** socket.io // PORT // change for deploy?
 
 
 // console.log that the server is up and running
@@ -48,21 +67,21 @@ const User = mongoose.model('User', userSchema);
 // db.kudos.deleteMany({});
 // db.user.deleteMany({});
 
-const bob = new User({name: "Bob"});
-const jack = new User({name: "Jack"});
-const jill = new User({name: "Jill"});
-const kudos1 = new Kudos({title: "I'm the first!", body: "If you ain't first, yer last.", sender: bob._id, recipient: jack._id })
-const kudos2 = new Kudos({title: "I'm the second!", body: "If you ain't first, yer second.", sender: jack._id, recipient: jill._id })
-const kudos3 = new Kudos({title: "I'm the third!", body: "If you ain't first, yer third.", sender: jill._id, recipient: bob._id })
+// const bob = new User({name: "Bob"});
+// const jack = new User({name: "Jack"});
+// const jill = new User({name: "Jill"});
+// const kudos1 = new Kudos({title: "I'm the first!", body: "If you ain't first, yer last.", sender: bob._id, recipient: jack._id })
+// const kudos2 = new Kudos({title: "I'm the second!", body: "If you ain't first, yer second.", sender: jack._id, recipient: jill._id })
+// const kudos3 = new Kudos({title: "I'm the third!", body: "If you ain't first, yer third.", sender: jill._id, recipient: bob._id })
 
-const seedDb = [bob, jack, jill, kudos1, kudos2, kudos3];
+// const seedDb = [bob, jack, jill, kudos1, kudos2, kudos3];
 
 
-seedDb.forEach(item => {
-    item.save( (err, obj)=> {
-        if (err) return console.error(err);
-    })
-})
+// seedDb.forEach(item => {
+//     item.save( (err, obj)=> {
+//         if (err) return console.error(err);
+//     })
+// })
 
 // ****************************************************
 // Routes
@@ -99,10 +118,6 @@ app.get('/api/users', function (req, res) {
 // ****************************************************
 // Twilio Route
 // ****************************************************
-// when an sms is received 
-// store the message 
-// if valid entry... then add kudos to the db (if new user, add user)
-// after updateing the db, tell the dom to rerender?
 app.post('/sms', (req, res) => 
 {
     const incomingMsg = req.body.Body;
@@ -124,7 +139,7 @@ app.post('/sms', (req, res) =>
             if (sender && recipient && title && body)
             {
                 // find users in DB or create users
-                User.findOneAndUpdate( { name: sender }, { name: sender}, {upsert: true} )
+                User.findOneAndUpdate( { name: sender }, { name: sender}, {upsert: true, new: true} )
                     .then((dbsender) => {
                         console.log('dbsender = ',dbsender)
                         const senderId = dbsender._id;
@@ -132,10 +147,9 @@ app.post('/sms', (req, res) =>
                     }).catch((err) => {res.json(err)})
 
                 const findRecipient = (senderId) => {
-                    User.findOneAndUpdate( { name: recipient }, { name: recipient }, { upsert: true } )
+                    User.findOneAndUpdate( { name: recipient }, { name: recipient }, { upsert: true, new: true } )
                     .then((dbrecipient) => {
                     console.log("dbrecipient = ", dbrecipient);
-                    console.log('dbsender = ', senderId);
                     const kudos = 
                     { 
                         title: title,
@@ -143,7 +157,6 @@ app.post('/sms', (req, res) =>
                         sender: senderId,
                         recipient: dbrecipient._id
                     };
-                    console.log("kudos! ", kudos)
                     addKudos(kudos);
                     }).catch((err) => {res.json(err)})
                 }
@@ -152,10 +165,12 @@ app.post('/sms', (req, res) =>
                     Kudos.create(kudos) 
                         .then((newKudos) => 
                         {
+                            io.emit('sms', { for: 'everyone' }); // ********************************************** socket.io event emmitter 
                             const msg = twiml.message('Thanks for sharing some kudos!!');
                             console.log('new kudos:  ', newKudos)
                             res.writeHead(200, {'Content-Type': 'text/xml'});
                             res.end(twiml.toString());
+                            
                         })
                         .catch( (err) => {res.json(err)} )  
                 }      
@@ -170,16 +185,7 @@ app.post('/sms', (req, res) =>
         
 });
 
-  // run ngrok http 5000  (DONE)
-  // test that text messages come through (DONE)
-  // test that i am parsing the messages as expected  (DONE)
-  // 
-  // make kudos post only work for existing people (if .includes([bob, jack, jill]) then extract first/to and second/from and post kudos)
-  // make adding users work "new: First"
-  // test that I am writing the kudos to database correctly
-  // test that the front end is updating after the database gets a new kudos post
-  // add users icon and list to frontend 
+
+
   // deploy to heroku
   // test heroku deployment 
-
-  // check out CHANGE STREAMS or do polling or do websockets.io

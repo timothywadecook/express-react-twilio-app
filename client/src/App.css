@@ -16,11 +16,12 @@ ul {
 
 .infoBox {
   background-color: #282c34;
+  padding: 50px 0px;
   width: 60%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #6c88bd;
+  color: white;
   border-radius: 10px;
   margin: 10px auto;
 }
@@ -38,7 +39,7 @@ ul {
 
 .App-header {
   background-color: #282c34;
-  min-height: 50vh;
+  min-height: 10vh;
   display: flex;
   flex-direction: column;
   align-items: center;
