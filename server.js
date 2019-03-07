@@ -28,8 +28,8 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // Socket.io 
 // https://medium.com/@Keithweaver_/using-socket-io-with-a-mern-stack-2a7049f94b85
 // ****************************************************
-// const httpSocket = http.Server(app); // per heroku docs
-const io = require('socket.io')(app);
+const httpSocket = http.Server(app); // per heroku docs
+const io = require('socket.io')(httpSocket);
 
 io.on('connection', function(socket){
   console.log('a user connected');
