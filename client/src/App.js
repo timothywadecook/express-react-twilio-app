@@ -3,7 +3,7 @@ import './App.css';
 // Socket.io client per the link below
 // https://medium.com/@Keithweaver_/using-socket-io-with-a-mern-stack-2a7049f94b85
 import io from 'socket.io-client'; // ************************************** sockets **********************
-const socket = io(8000); // ************************************** sockets **********************
+const socket = io(); // ************************************** sockets **********************
 
 
 const KudosItem = (props) => (
@@ -22,10 +22,6 @@ class App extends Component {
     kudos: [],
     users: [],
   };
-
-  // sendSocketIO() {   
-  //   socket.emit('sms', 'successful emit'); // ************************************** sockets **********************
-  // }
 
 
   componentDidMount() {

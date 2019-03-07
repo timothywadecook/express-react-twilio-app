@@ -5,6 +5,7 @@ const MessagingResponse = require('twilio').twiml.MessagingResponse; // Twilio!
 const bodyParser = require('body-parser'); // Twilio
 const http = require('http'); // Twilio
 const port = process.env.PORT || 5000; 
+const path = require('path')
 // note: we had to let our webpack development server know to proxy to this port 5000. proxy added in ./client/package.json 
 // note: history: npm i sockets.io (in root) and npm i sockets.io-client (in client directory)
 
@@ -30,7 +31,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // ****************************************************
 const httpSocket = http.Server(app); // per heroku docs
 const io = require('socket.io')(httpSocket);
-httpSocket.listen(8000)
+httpSocket.listen()
 
 io.on('connection', function(socket){
   console.log('a user connected');
