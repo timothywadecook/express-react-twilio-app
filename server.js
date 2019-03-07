@@ -17,8 +17,8 @@ app.use(express.json());
 app.use(express.static("./client/build")); // for deployment serve static files in build
 app.use(bodyParser.urlencoded({ extended: false })); // Twilio
 
-const db = mongoose.connect('mongodb://localhost/tinyImprovementsDb', { useNewUrlParser: true }); // will need to change for deployment
-
+// const db = mongoose.connect('mongodb://localhost/tinyImprovementsDb', { useNewUrlParser: true }); // development db
+const db = mongoose.connect('mongodb://heroku_49b1lz2g:h4g27ahi71jfld91dhhica1s08@ds161335.mlab.com:61335/heroku_49b1lz2g', {useNewUrlParser: true})
 
 // ****************************************************
 // Socket.io 
