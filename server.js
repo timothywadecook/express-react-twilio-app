@@ -31,7 +31,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // ****************************************************
 const httpSocket = http.Server(app); // per heroku docs
 const io = require('socket.io')(httpSocket);
-httpSocket.listen()
+// httpSocket.listen()
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -42,7 +42,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
 });
-// io.listen(); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+io.listen(8000); // ******************************************************************************************************** socket.io // PORT // change for deploy?
 
 
 
@@ -196,3 +196,6 @@ app.post('/api/sms', (req, res) =>
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname+'/client/build/index.html'));
   });
+app.post('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+});
