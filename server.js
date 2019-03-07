@@ -7,7 +7,6 @@ const http = require('http'); // Twilio
 const port = process.env.PORT || 5000; 
 const path = require('path')
 // note: we had to let our webpack development server know to proxy to this port 5000. proxy added in ./client/package.json 
-// "proxy": "stormy-bayou-41930.herokuapp.com:5000",
 // note: history: npm i sockets.io (in root) and npm i sockets.io-client (in client directory)
 
 
@@ -22,7 +21,6 @@ app.use(bodyParser.urlencoded({ extended: false })); // Twilio
 // const db = mongoose.connect('mongodb://localhost/tinyImprovementsDb', { useNewUrlParser: true }); // development db
 const db = mongoose.connect('mongodb://heroku_49b1lz2g:h4g27ahi71jfld91dhhica1s08@ds161335.mlab.com:61335/heroku_49b1lz2g', {useNewUrlParser: true})
 
-// console.log that the server is up and running
 app.listen(port, () => console.log(`Listening on port ${port}`));
 
 
@@ -43,7 +41,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
 });
-// io.listen(); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+io.listen(8000); // ******************************************************************************************************** socket.io // PORT // change for deploy?
 
 
 

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 // Socket.io client per the link below
 // https://medium.com/@Keithweaver_/using-socket-io-with-a-mern-stack-2a7049f94b85
-import io from 'socket.io-client'; // ************************************** sockets **********************
-const socket = io(); // ************************************** sockets **********************
+import openSocket from 'socket.io-client'; // ************************************** sockets **********************
+const socket = openSocket(); // ************************************** sockets **********************
 
 
 const KudosItem = (props) => (
