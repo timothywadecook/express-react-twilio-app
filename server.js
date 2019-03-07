@@ -46,7 +46,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
 });
-io.listen(); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+// io.listen(); // ******************************************************************************************************** socket.io // PORT // change for deploy?
 
 
 
