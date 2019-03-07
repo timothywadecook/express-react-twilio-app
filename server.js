@@ -30,7 +30,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // ****************************************************
 const httpSocket = http.Server(app); // per heroku docs
 const io = require('socket.io')(httpSocket);
-httpSocket.listen()
+httpSocket.listen(8000)
 
 io.on('connection', function(socket){
   console.log('a user connected');
