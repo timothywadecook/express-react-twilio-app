@@ -97,7 +97,7 @@ app.get('/api/kudos', (req, res) => { // returns all kudos
     res.json(kudos)
   })
 });
-app.post('/kudos', (req, res) => { // add new kudos to db, then sends back all (updated) kudos
+app.post('/api/kudos', (req, res) => { // add new kudos to db, then sends back all (updated) kudos
     const kudos = req.body // req.body = {title: "", body: "", sender: "", recipient: ""} 
     Kudos.create(kudos)
     .then((newKudos) => {res.json(newKudos)})
@@ -118,7 +118,7 @@ app.get('/api/users', function (req, res) {
 // ****************************************************
 // Twilio Route
 // ****************************************************
-app.post('/sms', (req, res) => 
+app.post('/api/sms', (req, res) => 
 {
     const incomingMsg = req.body.Body;
     const twiml = new MessagingResponse();
@@ -186,6 +186,8 @@ app.post('/sms', (req, res) =>
 });
 
 
-
-  // deploy to heroku
-  // test heroku deployment 
+// The "catchall" handler: for any request that doesn't
+// match one above, send back React's index.html file.
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
