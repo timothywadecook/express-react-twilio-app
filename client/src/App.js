@@ -3,7 +3,7 @@ import './App.css';
 // Socket.io client per the link below
 // https://medium.com/@Keithweaver_/using-socket-io-with-a-mern-stack-2a7049f94b85
 import openSocket from 'socket.io-client'; // ************************************** sockets **********************
-const socket = openSocket('http://stormy-bayou-41930.herokuapp.com:8000'); // ************************************** sockets **********************
+const socket = openSocket('https://stormy-bayou-41930.herokuapp.com:8000'); // ************************************** sockets **********************
 
 
 const KudosItem = (props) => (
