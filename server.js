@@ -20,12 +20,17 @@ app.use(bodyParser.urlencoded({ extended: false })); // Twilio
 // const db = mongoose.connect('mongodb://localhost/tinyImprovementsDb', { useNewUrlParser: true }); // development db
 const db = mongoose.connect('mongodb://heroku_49b1lz2g:h4g27ahi71jfld91dhhica1s08@ds161335.mlab.com:61335/heroku_49b1lz2g', {useNewUrlParser: true})
 
+// console.log that the server is up and running
+app.listen(port, () => console.log(`Listening on port ${port}`));
+
+
 // ****************************************************
 // Socket.io 
 // https://medium.com/@Keithweaver_/using-socket-io-with-a-mern-stack-2a7049f94b85
 // ****************************************************
-const httpSocket = http.Server(app);
-const io = require('socket.io')(httpSocket);
+// const httpSocket = http.Server(app); // per heroku docs
+const io = require('socket.io')(app);
+
 io.on('connection', function(socket){
   console.log('a user connected');
   socket.on('disconnect', function(){
@@ -35,11 +40,11 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
 });
-// io.listen(8000); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+// io.listen(); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+
+setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 
 
-// console.log that the server is up and running
-app.listen(port, () => console.log(`Listening on port ${port}`));
 
 // ****************************************************
 // Models

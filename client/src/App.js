@@ -5,7 +5,9 @@ import './App.css';
 import io from 'socket.io-client'; // ************************************** sockets **********************
 const socket = io(); // ************************************** sockets **********************
 
-
+socket.on('time', function(timeString) {
+  console.log('Server time: ' + timeString) 
+});
 
 
 const KudosItem = (props) => (
