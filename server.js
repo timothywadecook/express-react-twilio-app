@@ -41,7 +41,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
 });
-io.listen(8000); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+io.listen('https://stormy-bayou-41930.herokuapp.com:8000'); // ******************************************************************************************************** socket.io // PORT // change for deploy?
 
 
 
