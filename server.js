@@ -8,6 +8,7 @@ const http = require('http'); // Twilio
 const port = 5000;
 const path = require('path')
 // note: we had to let our webpack development server know to proxy to this port 5000. proxy added in ./client/package.json 
+// "proxy": "stormy-bayou-41930.herokuapp.com:5000",
 // note: history: npm i sockets.io (in root) and npm i sockets.io-client (in client directory)
 
 
