@@ -29,6 +29,10 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // Socket.io 
 // https://medium.com/@Keithweaver_/using-socket-io-with-a-mern-stack-2a7049f94b85
 // ****************************************************
+app.use((req, res) => {
+    res.sendFile(path.join(__dirname+'/client/build/index.html'));
+  });
+
 const httpSocket = http.Server(app); // per heroku docs
 const io = require('socket.io')(httpSocket);
 // httpSocket.listen()
@@ -42,7 +46,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
 });
-io.listen(8000); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+io.listen(); // ******************************************************************************************************** socket.io // PORT // change for deploy?
 
 
 
@@ -193,9 +197,9 @@ app.post('/api/sms', (req, res) =>
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-  });
-app.post('*', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
+// app.get('*', (req, res) => {
+//     res.sendFile(path.join(__dirname+'/client/build/index.html'));
+//   });
+// app.post('*', (req, res) => {
+//     res.sendFile(path.join(__dirname+'/client/build/index.html'));
+// });
