@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const MessagingResponse = require('twilio').twiml.MessagingResponse; // Twilio!
 const bodyParser = require('body-parser'); // Twilio
 const http = require('http'); // Twilio
-// const port = process.env.PORT || 5000; 
-const port = 5000;
+const port = process.env.PORT || 5000; 
 const path = require('path')
 // note: we had to let our webpack development server know to proxy to this port 5000. proxy added in ./client/package.json 
 // "proxy": "stormy-bayou-41930.herokuapp.com:5000",
