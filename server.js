@@ -35,7 +35,7 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
   });
 });
-io.listen(8000); // ******************************************************************************************************** socket.io // PORT // change for deploy?
+io.listen(443); // ******************************************************************************************************** socket.io // PORT // change for deploy?
 
 
 // console.log that the server is up and running
