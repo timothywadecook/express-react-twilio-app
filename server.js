@@ -30,6 +30,7 @@ app.listen(port, () => console.log(`Listening on port ${port}`));
 // ****************************************************
 const httpSocket = http.Server(app); // per heroku docs
 const io = require('socket.io')(httpSocket);
+httpSocket.listen()
 
 io.on('connection', function(socket){
   console.log('a user connected');
@@ -41,8 +42,6 @@ io.on('connection', function(socket){
   });
 });
 // io.listen(); // ******************************************************************************************************** socket.io // PORT // change for deploy?
-
-setInterval(() => io.emit('time', new Date().toTimeString()), 1000);
 
 
 
